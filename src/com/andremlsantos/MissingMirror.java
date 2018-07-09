@@ -4,40 +4,44 @@ import com.andremlsantos.extra.Cell;
 
 public class MissingMirror {
 
-	//position of the missing mirror in the new SAFE
+	// position of the missing mirror in the new SAFE
 	private int r, c;
-	
-	//clone of the original safe
+
+	// clone of the original safe
 	private Safe safe;
-	
-	//if the current safe with the missing mirror is safe
+
+	// if the current safe with the missing mirror is safe
 	private boolean isSafe;
-	
-	//type of the missing mirror inserted
+
+	// type of the missing mirror inserted
 	private Cell typeOfMirror;
-	
-	public MissingMirror() {
-		
-	}
-	
+
+	public MissingMirror() { }
+
 	public MissingMirror(int rPosition, int cPosition, Safe originalSafe) {
 		this.r = rPosition;
 		this.c = cPosition;
 		this.safe = originalSafe.clone();
 	}
 
+	/*
+	 * We put a Mirror in (r,c) position
+	 * */
 	public void putMissingMirror() {
 		this.safe.putCell(r, c, typeOfMirror);
 	}
-	
+
+	/*
+	 * We check, if the new Safe (with the new inserted mirror) its safe, bean detected 
+	 * */
 	public boolean checkSafe() {
 		this.isSafe = this.safe.checkSafe();
 		return this.isSafe;
 	}
-	
+
 	/*
 	 * GET & SET
-	 * */
+	 */
 	public int getR() {
 		return r;
 	}
@@ -76,7 +80,5 @@ public class MissingMirror {
 
 	public void setTypeOfMirror(Cell typeOfMirror) {
 		this.typeOfMirror = typeOfMirror;
-	}	
-	
-	
+	}
 }

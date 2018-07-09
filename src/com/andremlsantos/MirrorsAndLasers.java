@@ -1,69 +1,46 @@
 package com.andremlsantos;
 
-import java.util.Scanner;
+import java.util.ArrayList;
 
 import com.andremlsantos.extra.Cell;
 
 public class MirrorsAndLasers {
-	
+
+	// PUBLIC METHODS
+	// ----------------------------------------------------------------
 	public static void main(String[] args) {
-		// read from user input
-		Scanner sc = new Scanner(System.in);
+		// Aux class for dealing with the user input
+		Input input = new Input();
 
-		// number of rows
-		int r;
+		// Read the user input from the console
+		ArrayList<String> userInputs = input.readUserInput();
 
-		// number of columns
-		int c;
+		// Convert the user input to a List of Safe obj
+		ArrayList<Safe> safes = input.parseUserInput(userInputs);
 
-		// number of / mirrors
-		int m;
+		for (int i = 0; i < safes.size(); i++) {
+			// we clone from the original safe
+			Safe safeClone = safes.get(i).clone();
 
-		// number of \ mirrors
-		int n;
-
-		// single input
-		{
-			// safe dimensions
-			r = sc.nextInt();
-			c = sc.nextInt();
-
-			// number and type of mirrors
-			m = sc.nextInt();
-			n = sc.nextInt();
-
-			// lets create a new SAFE object
-			Safe safe = new Safe(r, c);
-
-			// Slash mirrors
-			for (int i = 0; i < m; i++) {
-				int yy = sc.nextInt() - 1;
-				int xx = sc.nextInt() - 1;
-
-				safe.putCell(yy, xx, Cell.MirrorSlash);
-			}
-
-			// Backslash mirrors
-			for (int i = 0; i < n; i++) {
-				int yy = sc.nextInt() - 1;
-				int xx = sc.nextInt() - 1;
-
-				safe.putCell(yy, xx, Cell.MirrorBackslash);
-			}
-
-			Safe safeClone = safe.clone();
+			//safeClone.print();
 			
-			boolean isSafe = safeClone.checkSafe();
-			int caseNumber = 0;
+			// we compute if the bean is detected, safe open
+			boolean beamDetected = safeClone.checkSafe();
 
-			if (isSafe) {
-				System.out.println("Case " + caseNumber + ": 0");
+			if (beamDetected) {
+				System.out.println("Case " + i + ": 0");
 			} else {
-				calcMissingMirrors(safe.clone(), caseNumber);
+				calcMissingMirrors(safes.get(i).clone(), i);
 			}
 		}
 	}
 
+	// PRIVATE METHODS
+	// ----------------------------------------------------------------
+	/*
+	 * AUX function 
+	 * for each EMPTY position, we put a new MIRROR, then we compute if the bean is detected
+	 */
 	private static void calcMissingMirrors(Safe safe, int caseNumber) {
 		int k = 0, r = safe.getRows(), c = safe.getColumns();
 
@@ -85,11 +62,10 @@ public class MirrorsAndLasers {
 					missingMirrorBack.checkSafe();
 
 					if (missingMirror.isSafe() || missingMirrorBack.isSafe()) {
-						
-						//we increase the number of possible mirrors solutions
+						// we increase the number of possible mirrors solutions
 						k++;
-						
-						//we want the lexicographic smallest position
+
+						// we want the lexicographic smallest position
 						if ((i + j) < (r + c)) {
 							r = i + 1;
 							c = j + 1;

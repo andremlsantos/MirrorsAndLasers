@@ -23,7 +23,7 @@ public class Safe {
 
 		this.grid = new Cell[r][c];
 
-		// after we created our world, we fill all cells with empty tag
+		// we fill all cells with empty tag
 		fillEmpty();
 	}
 
@@ -50,6 +50,7 @@ public class Safe {
 	}
 
 	/*
+	 * PRINTS the current SAFE obj matrix
 	 * */
 	public void print() {
 		for (int i = 0; i < rows; i++) {
@@ -62,33 +63,38 @@ public class Safe {
 	}
 
 	/*
+	 * We check if the bean is detected
 	 * */
 	public boolean checkSafe() {
 		Laser laser = new Laser();
 		boolean outOfBounds = false;
 		
 		while (!outOfBounds) {
-			// current position of the lazer
+			// current position of the laser
 			int r = laser.getR();
 			int c = laser.getC();
 
+			// we continuing the movements while we don't exit the safe
 			outOfBounds = move(laser, grid[r][c]);
 		}
 
+		// where the laser exits the grid world
 		int r = laser.getR();
 		int c = laser.getC();
 		Orientation laserOrientation = laser.getBeanOrientation();
 
 		if (r == rows - 1 && c >= columns && laserOrientation.equals(Orientation.RIGHT)) {
+			// bean detected
 			return true;
 		} else {
+			// bean not detected
 			return false;
 		}
 	}
 
 	/*
-	 * Determines the next laser movement Based on the current laser orientation,
-	 * position and CELL occupied
+	 * Determines the next laser movement 
+	 * Based on the current laser orientation, position and CELL occupied
 	 */
 	private boolean move(Laser laser, Cell cell) {
 		// current position of the laser
@@ -160,6 +166,7 @@ public class Safe {
 
 		boolean isOut = (r < 0 || r >= rows || c < 0 || c >= columns);
 
+		// for debugging, we put into the grid world, the current laser location
 		if (!isOut && grid[r][c].equals(Cell.EMPYT)) {
 			putCell(r, c, Cell.Lazer);
 		}
