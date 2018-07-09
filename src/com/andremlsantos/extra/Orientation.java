@@ -1,4 +1,4 @@
-package com.andremlsantos;
+package com.andremlsantos.extra;
 
 public enum Orientation {
 	TOP,

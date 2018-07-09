@@ -1,9 +1,11 @@
 package com.andremlsantos;
 
+import com.andremlsantos.extra.Orientation;
+
 public class Laser {
-	int xxPosition;
-	int yyPosition;
-	Orientation beanOrientation;
+	private int xxPosition;
+	private int yyPosition;
+	private Orientation beanOrientation;
 	
 	public Laser() {
 		this.xxPosition = 0;
@@ -11,6 +13,9 @@ public class Laser {
 		this.beanOrientation = Orientation.RIGHT;
 	}
 	
+	/*
+	 * GET & SET
+	 * */
 	public int getC() {
 		return xxPosition;
 	}

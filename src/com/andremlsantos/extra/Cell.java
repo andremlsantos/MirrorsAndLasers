@@ -1,4 +1,4 @@
-package com.andremlsantos;
+package com.andremlsantos.extra;
 
 //https://www.owasp.org/index.php/Password_special_characters
 public enum Cell {

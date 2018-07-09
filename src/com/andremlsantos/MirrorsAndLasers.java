@@ -2,8 +2,10 @@ package com.andremlsantos;
 
 import java.util.Scanner;
 
-public class MirrorsAndLasers {
+import com.andremlsantos.extra.Cell;
 
+public class MirrorsAndLasers {
+	
 	public static void main(String[] args) {
 		// read from user input
 		Scanner sc = new Scanner(System.in);
@@ -22,16 +24,16 @@ public class MirrorsAndLasers {
 
 		// single input
 		{
-			//safe dimensions
+			// safe dimensions
 			r = sc.nextInt();
 			c = sc.nextInt();
-			
-			//number and type of mirrors
+
+			// number and type of mirrors
 			m = sc.nextInt();
 			n = sc.nextInt();
-			
-			//lets create a new SAFE object
-			Safe safe = new Safe(r,  c);
+
+			// lets create a new SAFE object
+			Safe safe = new Safe(r, c);
 
 			// Slash mirrors
 			for (int i = 0; i < m; i++) {
@@ -48,23 +50,59 @@ public class MirrorsAndLasers {
 
 				safe.putCell(yy, xx, Cell.MirrorBackslash);
 			}
-			
+
 			Safe safeClone = safe.clone();
 			
-			//safe.print();
-
-			//int nPossibleSimulations = r * c - m - n;
-
-			//simulation(safe);
-			
-			//boolean isSafe = safe.checkSafe();
 			boolean isSafe = safeClone.checkSafe();
-			
-			if(isSafe) {
-				System.out.println("is safe");
+			int caseNumber = 0;
+
+			if (isSafe) {
+				System.out.println("Case " + caseNumber + ": 0");
 			} else {
-				System.out.println("is not safe");
+				calcMissingMirrors(safe.clone(), caseNumber);
 			}
 		}
-	}	
+	}
+
+	private static void calcMissingMirrors(Safe safe, int caseNumber) {
+		int k = 0, r = safe.getRows(), c = safe.getColumns();
+
+		for (int i = 0; i < safe.getRows(); i++) {
+			for (int j = 0; j < safe.getColumns(); j++) {
+				if (safe.getGrid()[i][j].equals(Cell.EMPYT)) {
+
+					// type of mirror /
+					MissingMirror missingMirror = new MissingMirror(i, j, safe);
+					missingMirror.setTypeOfMirror(Cell.MirrorSlash);
+					missingMirror.putMissingMirror();
+
+					// type of mirror \
+					MissingMirror missingMirrorBack = new MissingMirror(i, j, safe);
+					missingMirrorBack.setTypeOfMirror(Cell.MirrorBackslash);
+					missingMirrorBack.putMissingMirror();
+
+					missingMirror.checkSafe();
+					missingMirrorBack.checkSafe();
+
+					if (missingMirror.isSafe() || missingMirrorBack.isSafe()) {
+						
+						//we increase the number of possible mirrors solutions
+						k++;
+						
+						//we want the lexicographic smallest position
+						if ((i + j) < (r + c)) {
+							r = i + 1;
+							c = j + 1;
+						}
+					}
+				}
+			}
+		}
+
+		if (k == 0) {
+			System.out.println("Case " + caseNumber + ": impossible");
+		} else {
+			System.out.println("Case " + caseNumber + ": " + k + " " + r + " " + c);
+		}
+	}
 }

@@ -1,15 +1,19 @@
 package com.andremlsantos;
 
-public class Safe implements Cloneable {
+import com.andremlsantos.extra.Cell;
+import com.andremlsantos.extra.Orientation;
+
+public class Safe {
 
 	// SAFE dimensions
-	int rows;
-	int columns;
+	private int rows;
+	private int columns;
 
 	// grid world
-	Cell[][] grid;
+	private Cell[][] grid;
 
-	// PUBLIC METHODS ----------------------------------------------------------------
+	// PUBLIC METHODS
+	// ----------------------------------------------------------------
 	public Safe() {
 	}
 
@@ -19,26 +23,28 @@ public class Safe implements Cloneable {
 
 		this.grid = new Cell[r][c];
 
-		//after we created our world, we fill all cells with empty tag
+		// after we created our world, we fill all cells with empty tag
 		fillEmpty();
 	}
 
 	/*
-	 * CLONABLE DP
-	 * for creating copies of the original safe
-	 * */
+	 * CLONABLE DP for creating copies of the original safe
+	 */
 	public Safe clone() {
-		try {
-			return (Safe) super.clone();
-		} catch (CloneNotSupportedException e) {
-			System.out.println("CloneNotSupportedException comes out : " + e.getMessage());
+		Safe clone = new Safe(this.rows, this.columns);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				clone.putCell(i, j, grid[i][j]);
+			}
 		}
-		return null;
+
+		return clone;
 	}
 
 	/*
 	 * Put a CELL object into position (r,c)
-	 * */
+	 */
 	public void putCell(int r, int c, Cell lazer) {
 		this.grid[r][c] = lazer;
 	}
@@ -60,21 +66,13 @@ public class Safe implements Cloneable {
 	public boolean checkSafe() {
 		Laser laser = new Laser();
 		boolean outOfBounds = false;
-
-		if (grid[0][0].equals(Cell.EMPYT)) {
-			putCell(0, 0, Cell.Lazer);
-		}
-
-		// print();
-
+		
 		while (!outOfBounds) {
 			// current position of the lazer
 			int r = laser.getR();
 			int c = laser.getC();
 
 			outOfBounds = move(laser, grid[r][c]);
-
-			// print();
 		}
 
 		int r = laser.getR();
@@ -89,16 +87,16 @@ public class Safe implements Cloneable {
 	}
 
 	/*
-	 * Determines the next laser movement 
-	 * Based on the current laser orientation, position and CELL occupied
-	 * */
+	 * Determines the next laser movement Based on the current laser orientation,
+	 * position and CELL occupied
+	 */
 	private boolean move(Laser laser, Cell cell) {
 		// current position of the laser
 		int r = laser.getR();
 		int c = laser.getC();
 
 		if (cell.equals(Cell.EMPYT) || cell.equals(Cell.Lazer)) {
-			//we continue our current orientation
+			// we continue our current orientation
 			switch (laser.getBeanOrientation()) {
 			case TOP:
 				r -= 1;
@@ -140,8 +138,8 @@ public class Safe implements Cloneable {
 		} else if (cell.equals(Cell.MirrorSlash)) {
 			switch (laser.getBeanOrientation()) {
 			case TOP:
-				laser.setBeanOrientation(Orientation.TOP);
-				r -= 1;
+				laser.setBeanOrientation(Orientation.RIGHT);
+				c += 1;
 				break;
 			case DOWN:
 				laser.setBeanOrientation(Orientation.LEFT);
@@ -152,16 +150,12 @@ public class Safe implements Cloneable {
 				r += 1;
 				break;
 			case RIGHT:
-				laser.setBeanOrientation(Orientation.RIGHT);
-				c += 1;
+				laser.setBeanOrientation(Orientation.TOP);
+				r -= 1;
 				break;
 			default:
 				break;
-			}
-
-			if (grid[r][c].equals(Cell.EMPYT)) {
-				putCell(r, c, Cell.Lazer);
-			}
+			}			
 		}
 
 		boolean isOut = (r < 0 || r >= rows || c < 0 || c >= columns);
@@ -177,7 +171,35 @@ public class Safe implements Cloneable {
 		return isOut;
 	}
 
-	// PRIVATE METHODS ----------------------------------------------------------------
+	/*
+	 * GET & SET
+	 */
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public int getColumns() {
+		return columns;
+	}
+
+	public void setColumns(int columns) {
+		this.columns = columns;
+	}
+
+	public Cell[][] getGrid() {
+		return grid;
+	}
+
+	public void setGrid(Cell[][] grid) {
+		this.grid = grid;
+	}
+
+	// PRIVATE METHODS
+	// ----------------------------------------------------------------
 	/*
 	 * FILL ALL CELLS EMPTY
 	 */
@@ -188,5 +210,4 @@ public class Safe implements Cloneable {
 			}
 		}
 	}
-
 }
