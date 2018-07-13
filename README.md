@@ -29,36 +29,8 @@ For each test case, display its case number followed by:
   <li>impossible if the safe cannot be opened with or without inserting a mirror</li>
 </ul>
 
-Sample Input
-
-5 6 1 4
-
-2 3
-
-1 2
-
-2 5
-
-4 2
-
-5 5
-
-100 100 0 2
-
-1 77 
-
-100 77
-
-100 100 0 0
 
 
-Sample Output
-
-2 4 3
-
-0
-
-impossible
 
 
 How to import?
